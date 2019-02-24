@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   post 'attendance/in_time'
   post 'attendance/remote_in_time'
   post 'attendance/out_time'
+  post 'attendance/break_in_time'
+  post 'attendance/break_out_time'
 
   #home
   get 'home/index'
