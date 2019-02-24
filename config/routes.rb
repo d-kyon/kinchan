@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'attendance/index/:id' => 'attendance#index',as:'attendance_index'
   get 'attendance/show/:id' => 'attendance#show',as:'attendance_show'
   post 'attendance/in_time'
+  post 'attendance/remote_in_time'
   post 'attendance/out_time'
 
   #home

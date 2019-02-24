@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_12_100930) do
+ActiveRecord::Schema.define(version: 2019_02_24_053123) do
 
   create_table "attendances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "in_time"
     t.datetime "out_time"
     t.datetime "break_in_time"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 2019_02_12_100930) do
     t.boolean "is_remote", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_attendances_on_user_id"
+  end
+
+  create_table "breaks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "in_time"
+    t.datetime "out_time"
+    t.bigint "user_id"
+    t.bigint "attendance_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendance_id"], name: "index_breaks_on_attendance_id"
+    t.index ["user_id"], name: "index_breaks_on_user_id"
   end
 
   create_table "earnings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -50,4 +62,7 @@ ActiveRecord::Schema.define(version: 2019_02_12_100930) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "attendances", "users"
+  add_foreign_key "breaks", "attendances"
+  add_foreign_key "breaks", "users"
 end
