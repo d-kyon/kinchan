@@ -16,8 +16,6 @@ ActiveRecord::Schema.define(version: 2019_02_24_053123) do
     t.bigint "user_id"
     t.datetime "in_time"
     t.datetime "out_time"
-    t.datetime "break_in_time"
-    t.datetime "break_out_time"
     t.boolean "is_remote", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
