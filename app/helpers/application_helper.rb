@@ -34,7 +34,19 @@ module ApplicationHelper
     sum=0
     attendances.each do |attendance|
       if attendance.out_time.present? then
-        sum+=(working_hour(attendance)-sum_break_hour(attendance))/3600*user.travel_cost
+        sum+=(working_hour(attendance)-sum_break_hour(attendance))/3600*user.hourly_wage
+      end
+    end
+    return sum
+  end
+
+  def sum_travel_cost(attendances,user)
+    sum=0
+    attendances.each do |attendance|
+      if attendance.out_time.present? then
+        if !attendance.is_remote then
+          sum+=user.travel_cost
+        end
       end
     end
     return sum
