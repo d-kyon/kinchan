@@ -3,6 +3,7 @@ class AttendanceController < ApplicationController
   before_action :authenticate_current_user!
   before_action :set_user, only: [:show, :index,:in_time,:out_time,:remote_in_time,:break_in_time,:break_out_time]
   before_action :set_time, only: [:in_time, :out_time,:remote_in_time,:break_in_time,:break_out_time]
+  before_action :set_attendance, only: [:break_in_time,:break_out_time]
   def index
   end
 
@@ -25,12 +26,12 @@ class AttendanceController < ApplicationController
   end
 
   def break_in_time
-    Attendance.where(user_id:@user.id).last.update!(break_in_time:@time)
+    Break.create!(user_id:@user.id,attendance_id:@attendance.id,in_time:@time)
     redirect_to attendance_index_path(@user.id)
   end
 
   def break_out_time
-    Attendance.where(user_id:@user.id).last.update!(break_out_time:@time)
+    Break.where(user_id:@user.id,attendance_id:@attendance.id).last.update!(out_time:@time)
     redirect_to attendance_index_path(@user.id)
   end
 
@@ -45,6 +46,9 @@ class AttendanceController < ApplicationController
     if current_user.id!=params[:id].to_i then
       redirect_to home_index_path
     end
+  end
+  def set_attendance
+    @attendance=Attendance.where(user_id:@user.id).last
   end
 
 end

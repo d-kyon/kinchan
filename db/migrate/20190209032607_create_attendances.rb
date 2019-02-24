@@ -4,8 +4,6 @@ class CreateAttendances < ActiveRecord::Migration[5.2]
       t.references :user, index: true, foreign_key: true
       t.datetime :in_time
       t.datetime :out_time
-      t.datetime :break_in_time
-      t.datetime :break_out_time
       t.boolean :is_remote,           null: false, default: false
 
       t.timestamps
