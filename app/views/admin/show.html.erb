@@ -1,32 +1,52 @@
-<h1><%=@employee.username%>さん<%=%>のまとめ</h1>
-
+<h1><%=@employee.username%>さん<%=%><%=@year%>年<%=@month%>月のまとめ</h1>
 <%= form_tag(admin_search_month_path(id:@employee.id), method: :post) do%>
 <%= number_field_tag :year,@year%>年
 <%= number_field_tag :month,@month%>月
 <%= submit_tag "検索" %>
 <%end%>
-<h2>勤務時間合計</h2>
-<%=sum_working_hour(@attendances)%>
-<h2>勤怠管理</h2>
+
+<h2><%=@year%>年<%=@month%>月の仕事時間合計</h2>
+<%=sec_to_jp(sum_working_hour(@attendances))%>
+
+<h2><%=@year%>年<%=@month%>月の給与合計</h2>
+<h2><%=sum_salary(@attendances,@employee).ceil%>円</h2>
+<h2><%=@year%>年<%=@month%>月の交通費</h2>
+<h2><%=sum_travel_cost(@attendances,@employee)%>円</h2>
+<h2><%=@year%>年<%=@month%>月の支払い合計</h2>
+<h2><%=sum_travel_cost(@attendances,@employee)+sum_salary(@attendances,@employee).ceil%>円</h2>
+
+<h2>勤務詳細</h2>
+<hr>
 <% @attendances.each do |attendance| %>
+  <%if attendance.is_remote then%>
+    <p>
+      リモート出勤　<%=attendance.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%>
+    </p>
+  <%else%>
     <p>
       出勤　<%=attendance.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%>
     </p>
-
+  <%end%>
+     <%attendance.break.each do |rest|%>
+       <p>休憩開始時刻　<%=rest.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%></p>
+       <p>休憩終了時刻　<%=rest.out_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%></p>
+      <%end%>
       <%if attendance.out_time.nil?%>
       <p>出勤中</p>
-      <p>出勤時間</p>
       <%else%>
       <p>退勤　<%=attendance.out_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.out_time.wday]}) %H:%M:%S")%></p>
+      <br>
       <p>
-        出勤時間　<%=working_hour(attendance.in_time,attendance.out_time)%>
+        合計休憩時間 <%=sec_to_jp(sum_break_hour(attendance))%>
+      </p>
+      <p>
+        出勤時間　<%=sec_to_jp(working_hour(attendance))%>
+      </p>
+      <p>
+        仕事時間　<%=sec_to_jp(working_hour(attendance)-sum_break_hour(attendance))%>
       </p>
       <%end%>
 
-    <br>
+    <hr>
 <% end %>
-
-<h2>給与合計</h2>
-<%=sum_earning(@earnings)%>円
-
 <%=link_to "ホームへ",home_index_path%>
