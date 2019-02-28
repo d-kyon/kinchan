@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2019_02_24_053123) do
     t.datetime "in_time"
     t.datetime "out_time"
     t.boolean "is_remote", default: false, null: false
+    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"

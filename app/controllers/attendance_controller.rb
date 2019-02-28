@@ -21,7 +21,7 @@ class AttendanceController < ApplicationController
   end
 
   def out_time
-    Attendance.where(user_id:@user.id).last.update!(out_time:@time)
+    Attendance.where(user_id:@user.id).last.update!(out_time:@time,content:params[:content])
     redirect_to attendance_index_path(@user.id)
   end
 

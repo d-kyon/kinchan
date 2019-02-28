@@ -5,7 +5,12 @@
   <%if is_break(@user) then%>
     <%= button_to "休憩終了",attendance_break_out_time_path(id:current_user.id), {method: :post} %>
   <%else%>
-    <%= button_to "退勤",attendance_out_time_path(id:current_user.id), {method: :post} %>
+  <%= form_tag(attendance_out_time_path(id:current_user.id), method: :post) do %>
+  <!-- ここにform_tagメソッドを記述 -->
+  <p>内容</p>
+  <%= text_area_tag :content ,"",:id => "content_field"%>
+  <%= submit_tag "退勤" , :id => "out_time_btn" ,:disabled => "true"%>
+  <% end %>
     <%= button_to "休憩開始",attendance_break_in_time_path(id:current_user.id), {method: :post} %>
   <%end%>
 <%else%>
@@ -13,6 +18,39 @@
   <%= button_to "リモート出勤",attendance_remote_in_time_path(id:current_user.id), {method: :post} %>
 <%end%>
 
-
-
 <%=link_to "ホームへ",home_index_path%>
+<script>
+
+  document.getElementById("out_time_btn").onclick = function() {
+    var in_time = '<%=@user.attendance.last.in_time-Time.local(2019,1,1,9,0,0,0)%>';
+    var jikan= new Date();
+    var kijun= new Date('2019/01/01 00:00:00');
+    var out_time = (jikan-kijun)/1000
+    var break_time = '<%=sum_break_hour(@user.attendance.last)%>'
+    var working = (out_time-in_time-break_time)/3600;
+    var hourly_wage = "<%=@user.hourly_wage%>";
+    var salary = Number(hourly_wage)*working;
+  // ここに#buttonをクリックしたら発生させる処理を記述する
+  // 「OK」時の処理開始 ＋ 確認ダイアログの表示
+if(window.confirm('<%=@user.username%>さんの今日の給与は'+Math.ceil(salary)+'円です。対価に見合っていますか？')){
+  window.alert('この調子！'); // example_confirm.html へジャンプ
+}
+// 「OK」時の処理終了
+// 「キャンセル」時の処理開始
+else{
+  window.alert('次頑張ろう！'); // 警告ダイアログを表示
+
+}
+// 「キャンセル」時の処理終了
+  };
+  window.onload=function(){
+
+    document.getElementById("content_field").addEventListener('keyup',function(){
+      if (document.getElementById("content_field").value.length > 0) {
+        document.getElementById("out_time_btn").disabled = false;
+      } else {
+        document.getElementById("out_time_btn").disabled = true;
+      }
+    });
+  }
+</script>
