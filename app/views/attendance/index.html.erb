@@ -1,24 +1,23 @@
-<h1>勤怠管理</h1>
-<h3>ようこそ<%= @user.username%>さん！</h3>
+<h1>勤怠</h1>
 
 <%if is_working(@user) then%>
   <%if is_break(@user) then%>
-    <%= button_to "休憩終了",attendance_break_out_time_path(id:current_user.id), {method: :post} %>
+    <%= button_to "休憩終了",attendance_break_out_time_path(id:current_user.id), method: :post,class:"btn btn-success attendance_btn" %>
   <%else%>
   <%= form_tag(attendance_out_time_path(id:current_user.id), method: :post) do %>
   <!-- ここにform_tagメソッドを記述 -->
-  <p>内容</p>
-  <%= text_area_tag :content ,"",:id => "content_field"%>
-  <%= submit_tag "退勤" , :id => "out_time_btn" ,:disabled => "true"%>
+  <p>作業内容</p>
+  <%= text_area_tag :content ,"",:id => "content_field",class:"form-control"%>
+  <%= submit_tag "退勤" , :id => "out_time_btn" ,:disabled => "true",class:"btn btn-dark attendance_btn"%>
   <% end %>
-    <%= button_to "休憩開始",attendance_break_in_time_path(id:current_user.id), {method: :post} %>
+    <%= button_to "休憩開始",attendance_break_in_time_path(id:current_user.id),method: :post,class:"btn btn-success attendance_btn" %>
   <%end%>
 <%else%>
-  <%= button_to "出勤",attendance_in_time_path(id:current_user.id), {method: :post} %>
-  <%= button_to "リモート出勤",attendance_remote_in_time_path(id:current_user.id), {method: :post} %>
+<div class="row">
+  <%= button_to "出勤",attendance_in_time_path(id:current_user.id), method: :post,class:"btn btn-dark attendance_btn" %>
+  <%= button_to "リモート出勤",attendance_remote_in_time_path(id:current_user.id),method: :post,class:"btn btn-dark attendance_btn" %>
+</div>
 <%end%>
-
-<%=link_to "ホームへ",home_index_path%>
 <script>
 
   document.getElementById("out_time_btn").onclick = function() {
@@ -43,7 +42,6 @@ else{
 }
 // 「キャンセル」時の処理終了
   };
-  window.onload=function(){
     document.getElementById("content_field").addEventListener('keyup',function(){
       if (document.getElementById("content_field").value.length > 0) {
         document.getElementById("out_time_btn").disabled = false;
@@ -51,5 +49,4 @@ else{
         document.getElementById("out_time_btn").disabled = true;
       }
     });
-  }
 </script>

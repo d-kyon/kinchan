@@ -13,3 +13,37 @@
  *= require_tree .
  *= require_self
  */
+ // Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "bootstrap";
+* {
+  font-family:serif !important;
+  font-size: 20px;
+  @media (min-width: 800px) {
+
+  }
+}
+
+.attendance-border {
+  border: groove 6px #e9ecef;
+}
+.attendance_btn {
+  padding:10px 0;
+  margin:50px 10px 0 10px;
+  width:150px;
+  text-align: center;
+}
+.attendance_btn {
+  padding:10px 0;
+  width:150px;
+  text-align: center;
+}
+.attendance {
+  text-align: center;
+}
+.logout_btn {
+      color: rgba(255, 255, 255, 0.5) !important;
+  :hover {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+}

@@ -6,38 +6,80 @@
 <%end%>
 
 <h2>勤務詳細</h2>
-<hr>
-<% @attendances.each do |attendance| %>
-  <%if attendance.is_remote then%>
-    <p>
-      リモート出勤　<%=attendance.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%>
-    </p>
-  <%else%>
-    <p>
-      出勤　<%=attendance.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%>
-    </p>
-  <%end%>
-     <%attendance.break.each do |rest|%>
-       <p>休憩開始時刻　<%=rest.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%></p>
-       <p>休憩終了時刻　<%=rest.out_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]}) %H:%M:%S")%></p>
-      <%end%>
-      <%if attendance.out_time.nil?%>
-      <p>出勤中</p>
-      <%else%>
-      <p>退勤　<%=attendance.out_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.out_time.wday]}) %H:%M:%S")%></p>
-      <br>
-      <p>
-        合計休憩時間 <%=sec_to_jp(sum_break_hour(attendance))%>
-      </p>
-      <p>
-        出勤時間　<%=sec_to_jp(working_hour(attendance))%>
-      </p>
-      <p>
-        仕事時間　<%=sec_to_jp(working_hour(attendance)-sum_break_hour(attendance))%>
-      </p>
-      <%end%>
+<div class="row">
+  <% @attendances.each do |attendance| %>
+  <div class="col-sm-12  col-md-6">
+    <div class="card bg-light mb-3">
+      <div class="card-header"><%=attendance.in_time.try(:strftime, "%Y年%-m月%-d日(#{%w(日 月 火 水 木 金 土)[attendance.in_time.wday]})")%></div>
+      <div class="card-body">
 
-    <hr>
-<% end %>
+        <div class="row attendance" style="margin-bottom:30px;">
+          <div class="col-sm-12 col-md-6 attendance-border">
+            <%if attendance.is_remote then%>
+            <div class="attendance_title">リモート出勤</div>
+            <div class="attendance_time">
+              <%=attendance.in_time.try(:strftime, "%H時%M分%S秒")%>
+            </div>
+            <%else%>
+            <div class="attendance_title">出勤</div>
+            <div class="attendance_time">
+              <%=attendance.in_time.try(:strftime, "%H時%M分%S秒")%>
+            </div>
+            <%end%>
+          </div>
+          <div class="col-sm-12 col-md-6 attendance-border">
+            <div class="attendance_title">退勤</div>
+            <div class="attendance_time">
+              <%=attendance.out_time.try(:strftime, "%H時%M分%S秒")%>
+            </div>
+          </div>
+        </div>
 
-<%=link_to "ホームへ",home_index_path%>
+         <%if attendance.break.present? then%>
+
+        <h3>休憩まとめ</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">開始時刻</th>
+              <th scope="col">終了時刻</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%attendance.break.each do |rest|%>
+            <tr>
+              <td><%=rest.in_time.try(:strftime, "%H時%M分%S秒")%></td>
+              <td><%=rest.out_time.try(:strftime, "%H時%M分%S秒")%></td>
+            </tr>
+          <%end%>
+        </tbody>
+        </table>
+        <%end%>
+
+        <%if attendance.out_time.nil?%>
+        <p>出勤中</p>
+        <%else%>
+
+        <h3>合計時間</h3>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th scope="row">休憩</th>
+              <td><%=sec_to_jp(sum_break_hour(attendance))%></td>
+            </tr>
+            <tr>
+              <th scope="row">出勤</th>
+              <td><%=sec_to_jp(working_hour(attendance))%></td>
+            </tr>
+            <tr>
+              <th scope="row">仕事</th>
+              <td><%=sec_to_jp(working_hour(attendance)-sum_break_hour(attendance))%></td>
+            </tr>
+          </tbody>
+        </table>
+        <%end%>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
