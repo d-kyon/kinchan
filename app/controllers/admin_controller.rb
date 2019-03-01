@@ -8,22 +8,22 @@ class AdminController < ApplicationController
   end
 
   def show
+    @year=Date.today.year
+    @month=Date.today.month
     if !@attendances then
-      @attendances=Attendance.where(user_id:@employee.id).order(:in_time)
+      @attendances=Attendance.where(user_id:@employee.id).date_month(@year,@month).order(:in_time)
     end
     if !@earnings then
       @earnings=Earning.where(user_id:@employee.id).order(:date)
     end
-    @year=Date.today.year
-    @month=Date.today.month
   end
 
   def attendance
+  @year=Date.today.year
+  @month=Date.today.month
     if !@attendances then
-      @attendances=Attendance.where(user_id:@employee.id).order(:in_time)
+      @attendances=Attendance.where(user_id:@employee.id).date_month(@year,@month).order(:in_time)
     end
-    @year=Date.today.year
-    @month=Date.today.month
   end
 
   def attendance_search_month

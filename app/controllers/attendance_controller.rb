@@ -5,6 +5,11 @@ class AttendanceController < ApplicationController
   before_action :set_time, only: [:in_time, :out_time,:remote_in_time,:break_in_time,:break_out_time]
   before_action :set_attendance, only: [:break_in_time,:break_out_time]
   def index
+    if @user.attendance.empty? then
+      in_time=Time.local(1900,1,1,9,0,0,0)
+      out_time=Time.local(1900,1,1,9,0,0,0)
+      Attendance.create!(user_id:@user.id,in_time:in_time,out_time:out_time)
+    end
   end
 
   def show
