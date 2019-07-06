@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   root 'home#index'
-
+  
+  #Lineボット
+  post '/callback', to:'webhook#callback'
+  get '/link',to:'webhook#link'
+  get '/redirect_lineaccount',to:'webhook#redirect_lineaccount',as: 'redirect_lineaccount'
   #admin
   get 'admin/index'
   get 'admin/show/:id' => 'admin#show',as:'admin_show'
