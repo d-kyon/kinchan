@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'line-bot-api'
-gem 'fog-aws'
-gem 'carrierwave'
+gem 'csv'
+gem 'aws-sdk-s3'
+gem 'aws-sdk', '~>1'
 ruby '2.4.5'
 gem 'unicorn','5.4.0'
 

@@ -135,8 +135,48 @@ before_action :validate_signature,except: [:link,:redirect_lineaccount]
               messages.push(quickReply)
     else
       case event.message['text']
-      when "ささ"
-        
+      when "給与明細送信"
+          require 'csv'
+  
+        begin
+          paylist_users = User.all
+          year=2019
+          month=7
+          data = CSV.generate do |csv|
+            csv << ['id', '氏名','仕事時間合計','時給','交通費','通勤日数']
+            paylist_users.each do |paylist_user|
+              attendances=paylist_user.attendance.date_month(year,month)
+              raw = []
+              raw << paylist_user.id
+              raw << paylist_user.username
+              raw << sec_to_jp(sum_working_hour(attendances))
+              raw << paylist_user.hourly_wage
+              raw << paylist_user.travel_cost
+              raw << paylist_user.attendance.count
+              csv << raw
+            end
+          end
+          file = data
+          require 'aws-sdk-v1'
+          aws_client = AWS::S3::Client.new(
+            access_key_id: "AKIAWHCSXGE5OCNDR2FH",
+            secret_access_key: "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",
+            region: "ap-northeast-1"
+            )
+          aws_client.put_object({
+                              :bucket_name => "kinchan.work",
+                              :key => "paylist/#{user.username}/#{year}/#{month}月分給与明細.csv",
+                              :data => file,
+                              :s3_endpoint => "s3.ap-northeast-1.amazonaws.com"
+                          })
+          logger.debug '全ての処理に成功しました。'
+        rescue => e
+          logger.debug "error occurred batch : #{Time.now} : #{e.message}"
+        end
+        messages = [{
+                  type: 'text',
+                  text: "https://s3-ap-northeast-1.amazonaws.com/kinchan.work/paylist/#{user.username}/#{year}/#{month}月分給与明細.csv"
+                }]
       when "勤務詳細"
         messages = [{
                   type: 'text',

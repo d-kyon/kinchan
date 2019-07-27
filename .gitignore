@@ -1,0 +1,5 @@
+config/database.yml
+log/development.log
+tmp/
+vendor/bundle/ruby/2.4.0/gems/sassc-2.0.1/
+vendor/
