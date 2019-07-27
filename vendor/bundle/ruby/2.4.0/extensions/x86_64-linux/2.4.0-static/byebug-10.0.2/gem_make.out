@@ -1,0 +1,19 @@
+current directory: /var/www/rails/kinchan/vendor/bundle/ruby/2.4.0/gems/byebug-10.0.2/ext/byebug
+/opt/bitnami/ruby/bin/ruby -r ./siteconf20190706-5262-1pqxeiu.rb extconf.rb
+creating Makefile
+
+current directory: /var/www/rails/kinchan/vendor/bundle/ruby/2.4.0/gems/byebug-10.0.2/ext/byebug
+make "DESTDIR=" clean
+
+current directory: /var/www/rails/kinchan/vendor/bundle/ruby/2.4.0/gems/byebug-10.0.2/ext/byebug
+make "DESTDIR="
+compiling breakpoint.c
+compiling byebug.c
+compiling context.c
+compiling locker.c
+compiling threads.c
+linking shared-object byebug/byebug.so
+
+current directory: /var/www/rails/kinchan/vendor/bundle/ruby/2.4.0/gems/byebug-10.0.2/ext/byebug
+make "DESTDIR=" install
+install -c -m 0755 byebug.so ./.gem.20190706-5262-1f89jgz/byebug
