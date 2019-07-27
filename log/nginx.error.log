@@ -1,1 +1,0 @@
-2019/03/13 08:36:18 [crit] 4466#0: *1 connect() to unix:/var/www/rails/mumu/tmp/sockets/.unicorn.sock failed (2: No such file or directory) while connecting to upstream, client: 119.241.245.144, server: 34.233.254.193, request: "GET / HTTP/1.1", upstream: "http://unix:/var/www/rails/mumu/tmp/sockets/.unicorn.sock:/", host: "34.233.254.193"
